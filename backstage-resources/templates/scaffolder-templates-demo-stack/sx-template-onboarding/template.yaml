@@ -21,7 +21,7 @@ spec:
           description: Select your team name for onboarding
           ui:field: MyGroupsPicker
           ui:options: {}
-        team-org:
+        teamOrg:
           title: Team Organization
           type: string
           description: Which organization should the team belong to
@@ -88,12 +88,12 @@ spec:
                 - group: kargo.akuity.io
                   kind: Project
               appOfAppsRepo:
-                repoURL: https://github.com/${{ parameters.team-org }}/${{ steps['catalogFetch'].output.entity.metadata.name }}-apps
+                repoURL: https://github.com/${{ parameters.teamOrg }}/${{ steps['catalogFetch'].output.entity.metadata.name }}-apps
                 path: demo-apps
                 revision: main
               multiStageKargoAppSet:
                 github:
-                  organization: ${{ parameters.team-org }}
+                  organization: ${{ parameters.teamOrg }}
 
     - id: publish
       name: Publish new Version of team configuration
@@ -130,7 +130,7 @@ spec:
       action: publish:github
       input:
         sourcePath: ./team-apps-of-apps
-        repoUrl: github.com?repo=${{ steps['catalogFetch'].output.entity.metadata.name }}-apps&owner=${{ parameters.team-org }}
+        repoUrl: github.com?repo=${{ steps['catalogFetch'].output.entity.metadata.name }}-apps&owner=${{ parameters.teamOrg }}
         description: team-apps repo for ${{ steps['catalogFetch'].output.entity.metadata.name }}
         token: ${{ secrets.USER_OAUTH_TOKEN }}
         gitAuthorName: ${{ user.entity.metadata.name }}
