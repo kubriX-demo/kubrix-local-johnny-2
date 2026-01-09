@@ -21,6 +21,11 @@ spec:
           description: Select your team name for onboarding
           ui:field: MyGroupsPicker
           ui:options: {}
+        team-org:
+          title: Team Organization
+          type: string
+          description: Which organization should the team belong to
+          default: 'suxess-it'
 
     - title: Choose a location
       required:
@@ -83,12 +88,12 @@ spec:
                 - group: kargo.akuity.io
                   kind: Project
               appOfAppsRepo:
-                repoURL: https://github.com/kubriX-demo/${{ steps['catalogFetch'].output.entity.metadata.name }}-apps
+                repoURL: https://github.com/${{ parameters.team-org }}/${{ steps['catalogFetch'].output.entity.metadata.name }}-apps
                 path: demo-apps
                 revision: main
               multiStageKargoAppSet:
                 github:
-                  organization: kubriX-demo
+                  organization: ${{ parameters.team-org }}
 
     - id: publish
       name: Publish new Version of team configuration
@@ -125,7 +130,7 @@ spec:
       action: publish:github
       input:
         sourcePath: ./team-apps-of-apps
-        repoUrl: github.com?repo=${{ steps['catalogFetch'].output.entity.metadata.name }}-apps&owner=kubriX-demo
+        repoUrl: github.com?repo=${{ steps['catalogFetch'].output.entity.metadata.name }}-apps&owner=${{ parameters.team-org }}
         description: team-apps repo for ${{ steps['catalogFetch'].output.entity.metadata.name }}
         token: ${{ secrets.USER_OAUTH_TOKEN }}
         gitAuthorName: ${{ user.entity.metadata.name }}
